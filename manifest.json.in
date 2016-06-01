@@ -1,0 +1,15 @@
+{
+    "architecture": "@CLICK_ARCH@",
+    "description": "A simple Unity scope written in JavaScript",
+    "framework": "ubuntu-sdk-15.04.5",
+    "hooks": {
+        "stars": {
+            "apparmor": "stars.apparmor",
+            "scope": "stars"
+        }
+    },
+    "maintainer": "Bertrand Chevrier <chevrier.bertrand@gmail.com>",
+    "name": "stars.krampstudio",
+    "title": "stars",
+    "version": "0.1.0"
+}

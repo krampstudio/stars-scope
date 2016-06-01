@@ -1,0 +1,10 @@
+[ScopeConfig]
+ScopeRunner=./node_modules/unity-js-scopes/bin/unity-js-scopes-launcher %S %R
+_DisplayName=Stars Scope
+_Description=This is a Stars scope
+Author = Bertrand Chevrier <chevrier.bertrand@gmail.com>
+Icon = icon.png
+
+[Appearance]
+PageHeader.Logo = logo.png
+

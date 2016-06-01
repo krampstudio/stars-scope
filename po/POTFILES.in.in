@@ -1,0 +1,4 @@
+[type: gettext/ini] src/data/stars.ini.in
+[type: gettext/ini] src/data/stars-settings.ini.in
+@GENERATED_POTFILES@
+
