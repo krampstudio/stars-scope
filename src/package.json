@@ -1,0 +1,35 @@
+{
+  "name": "stars-scope",
+  "version": "0.1.0",
+  "description": "Ubuntu Touch scope to get access to starred, bookmarked pages.",
+  "main": "stars.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "sqlite3": "^3.1.4",
+    "lodash": "^4.13.1"
+  },
+  "devDependencies": {
+    "eslint": "^2.11.1",
+    "faucet": "0.0.1",
+    "sqlite3": "^3.1.4",
+    "tape": "^4.5.1"
+  },
+  "scripts": {
+    "test": "tape test/**/*.js | faucet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krampstudio/stars-scope.git"
+  },
+  "keywords": [
+    "ubuntutouch"
+  ],
+  "author": "Bertrand Chevrier <chevrier.bertrand@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/krampstudio/stars-scope/issues"
+  },
+  "homepage": "https://github.com/krampstudio/stars-scope#readme"
+}

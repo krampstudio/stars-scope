@@ -28,12 +28,26 @@ configure_file(
   @ONLY COPYONLY
 )
 
+configure_file(
+  "data/bookmarks.sqlite"
+  "${CMAKE_CURRENT_BINARY_DIR}/bookmarks.sqlite"
+  @ONLY COPYONLY
+)
+
 add_custom_target(
   copy_modules ALL
   COMMAND ${CMAKE_COMMAND} -E create_symlink
     "${CMAKE_CURRENT_SOURCE_DIR}/node_modules"
     "${CMAKE_CURRENT_BINARY_DIR}/node_modules"
 )
+add_custom_target(
+  copy_providers ALL
+  COMMAND ${CMAKE_COMMAND} -E create_symlink
+    "${CMAKE_CURRENT_SOURCE_DIR}/providers"
+    "${CMAKE_CURRENT_BINARY_DIR}/providers"
+)
+
+
 
 # Install the scope ini, image, and js files
 install(
@@ -55,3 +69,10 @@ install(
   USE_SOURCE_PERMISSIONS
 )
 
+install(
+  DIRECTORY
+    "${CMAKE_CURRENT_SOURCE_DIR}/providers"
+  DESTINATION
+    ${SCOPE_INSTALL_DIR}
+  USE_SOURCE_PERMISSIONS
+)
