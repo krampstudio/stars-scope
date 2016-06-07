@@ -38,8 +38,8 @@ test('bookmarkProvider module', t => {
     });
 });
 
-test('get bookmarks', t => {
-    t.plan(3);
+test('get all bookmarks', t => {
+    t.plan(9);
 
     bookmarkProvider(testDb)
         .then( provider => {
@@ -49,6 +49,43 @@ test('get bookmarks', t => {
             t.ok(promise instanceof Promise, 'The getBookmarks function returns a promise');
             promise.then( result => {
                 t.ok(result.length > 0, 'There are bookmarks');
+
+                let bookmark = result[0];
+
+                t.equal(typeof bookmark.title, 'string', 'the bookmark has a title');
+                t.equal(typeof bookmark.url, 'string', 'the bookmark has an url');
+                t.equal(typeof bookmark.icon, 'string', 'the bookmark has an icon');
+
+                t.equal(bookmark.title, 'GitHub · Where software is built', 'The title is the one expect');
+                t.equal(bookmark.url, 'https://github.com/', 'The url is the one expected');
+                t.equal(bookmark.icon, 'https://github.com/favicon.ico', 'The icon is the one expected');
+            });
+            return promise;
+        })
+        .catch( err => t.fail('Something wrong occurs : ' + err.message));
+});
+
+test('search uapp bookmarks', t => {
+    t.plan(9);
+
+    bookmarkProvider(testDb)
+        .then( provider => {
+            t.equal(typeof provider, 'object', 'We\'ve got the provider');
+
+            let promise = provider.getBookmarks('uapp');
+            t.ok(promise instanceof Promise, 'The getBookmarks function returns a promise');
+            promise.then( result => {
+                t.equal(result.length, 1, 'There is a bookmark');
+
+                let bookmark = result[0];
+
+                t.equal(typeof bookmark.title, 'string', 'the bookmark has a title');
+                t.equal(typeof bookmark.url, 'string', 'the bookmark has an url');
+                t.equal(typeof bookmark.icon, 'string', 'the bookmark has an icon');
+
+                t.equal(bookmark.title, 'uApp Explorer', 'The title is the one expect');
+                t.equal(bookmark.url, 'https://uappexplorer.com/', 'The url is the one expected');
+                t.equal(bookmark.icon, 'https://uappexplorer.com/img/logo.png', 'The icon is the one expected');
             });
             return promise;
         })

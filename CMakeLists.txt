@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.8.10)
 # This is required to ensure the correct node modules are included in the project
 execute_process(COMMAND unity-js-scopes-tool install ${CMAKE_SOURCE_DIR}/src/node_modules unity-js-scopes)
 execute_process(COMMAND unity-js-scopes-tool install ${CMAKE_SOURCE_DIR}/src/node_modules sqlite3)
+execute_process(COMMAND unity-js-scopes-tool install ${CMAKE_SOURCE_DIR}/src/node_modules lodash.default)
 add_custom_target(build_modules ALL COMMAND unity-js-scopes-tool build ${CMAKE_SOURCE_DIR}/src/node_modules)
 
 # Do not remove this, its required for the correct functionality of the Ubuntu-SDK

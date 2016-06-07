@@ -35,7 +35,7 @@ scopes.self.initialize(scopeOptions, {
                         var categorised_result = new scopes.lib.CategorisedResult(category);
                         categorised_result.set_uri(bookmark.url);
                         categorised_result.set_title(bookmark.title);
-                        //categorised_result.set_art('http://openweathermap.org/img/w/' + r.weather[0].icon + '.png');
+                        categorised_result.set_art(bookmark.icon);
                         //categorised_result.set('subtitle', r.weather[0].description);
                         //categorised_result.set('description', 'A description of the result');
 
@@ -49,6 +49,8 @@ scopes.self.initialize(scopeOptions, {
     },
     preview: function(result, metadata) {
         console.log('preview', arguments);
+        console.log('result', result);
+        console.log('metadata', metadata);
         return null;
     }
 });

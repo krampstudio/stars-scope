@@ -10,6 +10,9 @@ const providerFactory = function providerFactory(dbLocation, providerApi){
         return Object.assign({
             getDb(){
                 return db;
+            },
+            close(){
+                return db.close();
             }
         }, providerApi);
     };
@@ -19,7 +22,7 @@ const providerFactory = function providerFactory(dbLocation, providerApi){
             if(err){
                 return reject(err);
             }
-            resolve(provider(new sqlite3.Database(dbLocation)));
+            resolve(provider(new sqlite3.Database(dbLocation, sqlite3.OPEN_READONLY)));
         });
     });
 
