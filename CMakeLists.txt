@@ -2,6 +2,7 @@ project(stars)
 cmake_minimum_required(VERSION 2.8.10)
 
 # This is required to ensure the correct node modules are included in the project
+execute_process(COMMAND rm -rf ${CMAKE_SOURCE_DIR}/src/node_modules/*)
 execute_process(COMMAND unity-js-scopes-tool install ${CMAKE_SOURCE_DIR}/src/node_modules unity-js-scopes)
 execute_process(COMMAND unity-js-scopes-tool install ${CMAKE_SOURCE_DIR}/src/node_modules sqlite3)
 execute_process(COMMAND unity-js-scopes-tool install ${CMAKE_SOURCE_DIR}/src/node_modules lodash.default)
