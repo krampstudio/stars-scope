@@ -1,10 +1,28 @@
 var scopes = require('unity-js-scopes');
-var scopeOptions = {};
 
+var scopeOptions = {};
 
 var bookmarks = 'src/bookmarks.sqlite';
 
-var bookmarkProvider = require('providers/bookmark.js');
+const bookmarkProvider = require('./providers/bookmark.js');
+const iconCrawler = require('./lib/iconCrawler.js');
+
+const categoryTpl = JSON.stringify({
+    'schema-version': 1,
+    'template': {
+        'category-layout': 'grid',
+        'card-size': 'medium'
+    },
+    'components': {
+        'title': 'title',
+        'art': {
+            'field': 'art',
+            'aspect-ratio': 1,
+            'fallback': 'icon.png'
+        },
+        'subtitle': 'subtitle'
+    }
+});
 
 scopes.self.initialize(scopeOptions, {
     run: function run() {
@@ -24,34 +42,44 @@ scopes.self.initialize(scopeOptions, {
         console.log('Search', arguments);
         return new scopes.lib.SearchQuery(canned_query, metadata, searchReply => {
             var qs = canned_query.query_string();
-            console.log('cannedQuery', canned_query, metadata, qs);
 
-            bookmarkProvider(bookmarks).then( provider => {
-                return provider.getBookmarks(qs).then(result => {
-                    var categoryRenderer = new scopes.lib.CategoryRenderer();
-                    var category = searchReply.register_category('current', '' , '', categoryRenderer);
+            bookmarkProvider(bookmarks)
+                .then(provider => {
+                    return provider.getBookmarks(qs).then(result => {
+                        return Promise.all(result.map(bookmark => {
+                            return iconCrawler(bookmark.url, { defaultIcon : bookmark.icon } )
+                                    .then(icon => {
+                                        console.log(icon);
+                                        bookmark.icon = icon;
+                                        return bookmark;
+                                    });
+                        }));
+                    });
+                })
+                .then(result => {
+                    var categoryRenderer = new scopes.lib.CategoryRenderer(categoryTpl);
+                    var category = searchReply.register_category('bookmarks', 'Bookmarks', 'icon.png', categoryRenderer);
 
-                    result.forEach( bookmark => {
+                    result.forEach(bookmark => {
                         var categorised_result = new scopes.lib.CategorisedResult(category);
                         categorised_result.set_uri(bookmark.url);
+                        categorised_result.set_dnd_uri(bookmark.url);
                         categorised_result.set_title(bookmark.title);
                         categorised_result.set_art(bookmark.icon);
-                        //categorised_result.set('subtitle', r.weather[0].description);
-                        //categorised_result.set('description', 'A description of the result');
-
+                        categorised_result.set_intercept_activation();
                         searchReply.push(categorised_result);
                     });
+                })
+                .catch(err => {
+                    console.error(err);
+                    console.log(err.stack);
                 });
-            }).catch( err => {
-                console.error(err);
-            });
-        }, function(){});
+        },
+        function() {});
     },
-    preview: function(result, metadata) {
-        console.log('preview', arguments);
-        console.log('result', result);
-        console.log('metadata', metadata);
-        return null;
+
+    activate: function(result, metadata) {
+        return new scopes.lib.ActivationQuery(result, metadata, 'open browser', 'open', () => null, () => {});
     }
 });
 

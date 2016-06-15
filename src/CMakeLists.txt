@@ -46,7 +46,12 @@ add_custom_target(
     "${CMAKE_CURRENT_SOURCE_DIR}/providers"
     "${CMAKE_CURRENT_BINARY_DIR}/providers"
 )
-
+add_custom_target(
+  copy_libs ALL
+  COMMAND ${CMAKE_COMMAND} -E create_symlink
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib"
+    "${CMAKE_CURRENT_BINARY_DIR}/lib"
+)
 
 
 # Install the scope ini, image, and js files
