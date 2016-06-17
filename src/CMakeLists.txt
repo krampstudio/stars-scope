@@ -33,6 +33,11 @@ configure_file(
   "${CMAKE_CURRENT_BINARY_DIR}/bookmarks.sqlite"
   @ONLY COPYONLY
 )
+configure_file(
+  "data/bookmarks.sqlite"
+  "${CMAKE_CURRENT_BINARY_DIR}/history.sqlite"
+  @ONLY COPYONLY
+)
 
 add_custom_target(
   copy_modules ALL
@@ -52,7 +57,12 @@ add_custom_target(
     "${CMAKE_CURRENT_SOURCE_DIR}/lib"
     "${CMAKE_CURRENT_BINARY_DIR}/lib"
 )
-
+add_custom_target(
+  copy_service ALL
+  COMMAND ${CMAKE_COMMAND} -E create_symlink
+    "${CMAKE_CURRENT_SOURCE_DIR}/service"
+    "${CMAKE_CURRENT_BINARY_DIR}/service"
+)
 
 # Install the scope ini, image, and js files
 install(

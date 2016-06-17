@@ -1,11 +1,9 @@
-var scopes = require('unity-js-scopes');
+const scopes = require('unity-js-scopes');
+const boomarkService = require('./service/bookmark.js');
 
-var scopeOptions = {};
+const scopeOptions = {};
 
-var bookmarks = 'src/bookmarks.sqlite';
-
-const bookmarkProvider = require('./providers/bookmark.js');
-const iconCrawler = require('./lib/iconCrawler.js');
+const noop = () => {};
 
 const categoryTpl = JSON.stringify({
     'schema-version': 1,
@@ -38,29 +36,16 @@ scopes.self.initialize(scopeOptions, {
         console.log('Stop', arguments);
         console.log('Stoping scope id: ' + scope_id + ', ' + scopes.self.scope_config);
     },
-    search: function(canned_query, metadata) {
-        console.log('Search', arguments);
-        return new scopes.lib.SearchQuery(canned_query, metadata, searchReply => {
-            var qs = canned_query.query_string();
+    search: function(cannedQuery, metadata) {
+        return new scopes.lib.SearchQuery(cannedQuery, metadata, searchReply => {
 
-            bookmarkProvider(bookmarks)
-                .then(provider => {
-                    return provider.getBookmarks(qs).then(result => {
-                        return Promise.all(result.map(bookmark => {
-                            return iconCrawler(bookmark.url, { defaultIcon : bookmark.icon } )
-                                    .then(icon => {
-                                        console.log(icon);
-                                        bookmark.icon = icon;
-                                        return bookmark;
-                                    });
-                        }));
-                    });
-                })
-                .then(result => {
+            boomarkService()
+                .getBookmarks(cannedQuery.query_string()).then(bookmarks => {
+
                     var categoryRenderer = new scopes.lib.CategoryRenderer(categoryTpl);
                     var category = searchReply.register_category('bookmarks', 'Bookmarks', 'icon.png', categoryRenderer);
 
-                    result.forEach(bookmark => {
+                    bookmarks.forEach(bookmark => {
                         var categorised_result = new scopes.lib.CategorisedResult(category);
                         categorised_result.set_uri(bookmark.url);
                         categorised_result.set_dnd_uri(bookmark.url);
@@ -69,18 +54,20 @@ scopes.self.initialize(scopeOptions, {
                         categorised_result.set_intercept_activation();
                         searchReply.push(categorised_result);
                     });
+
+                    searchReply.finished();
                 })
                 .catch(err => {
                     console.error(err);
                     console.log(err.stack);
                 });
-        },
-        function() {});
+        }, noop);
     },
 
     activate: function(result, metadata) {
-        return new scopes.lib.ActivationQuery(result, metadata, 'open browser', 'open', () => null, () => {});
+        return new scopes.lib.ActivationQuery(result, metadata, 'open browser', 'open', noop, noop);
     }
+
 });
 
 /*

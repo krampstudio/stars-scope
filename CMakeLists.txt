@@ -39,6 +39,8 @@ file(GLOB_RECURSE
   "po/*.pot"
   "*.js"
   "provider/*.js"
+  "service/*.js"
+  "lib/*.js"
 )
 add_custom_target(hidden_files
   ALL
