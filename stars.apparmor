@@ -1,7 +1,8 @@
 {
     "template": "ubuntu-scope-network",
     "policy_groups": [
-        "content_exchange"
+        "connectivity",
+        "networking"
     ],
     "policy_version": 1.3
 }

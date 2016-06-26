@@ -1,7 +1,7 @@
 {
     "architecture": "@CLICK_ARCH@",
     "description": "Your favorite web pages",
-    "framework": "ubuntu-sdk-15.04.5",
+    "framework": "ubuntu-sdk-15.04.4",
     "hooks": {
         "stars": {
             "apparmor": "stars.apparmor",

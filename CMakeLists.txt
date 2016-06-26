@@ -41,6 +41,7 @@ file(GLOB_RECURSE
   "provider/*.js"
   "service/*.js"
   "lib/*.js"
+  "README.md"
 )
 add_custom_target(hidden_files
   ALL
